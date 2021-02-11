@@ -1,0 +1,39 @@
+---
+- import_tasks: install-mongodb.yml
+- import_tasks: install-nodejs.yml
+- import_tasks: install-nvmesh-repository.yml
+
+- name: "Install NVMesh management"
+  package:
+    name:
+      - nvmesh-management
+
+# TBD - edit the installed config file instead of using templates
+- name: Modify /etc/nvmesh/management.js.conf
+  template:
+    src: 'etc/nvmesh/management.js.conf.j2'
+    dest: '/etc/nvmesh/management.js.conf'
+    mode: 0644
+    owner: root
+    group: root
+
+- name: Start NVMesh management
+  systemd:
+    name: nvmeshmgr
+    state: started
+    enabled: yes
+
+- name: Check management WebUI
+  uri:
+    url: "https://{{ inventory_hostname }}:4000/login"
+    # return_content: yes
+    headers:
+      Accept: application/json
+      # Accept-Language: "en"
+    validate_certs: no
+  retries: 10
+  delay: 5
+  register: result
+  until: ('status' in result) and (result.status == 200 or result.status == 302)
+  changed_when: false
+  # when: groups.mgr.index(inventory_hostname) == 0

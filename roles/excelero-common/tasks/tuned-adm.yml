@@ -1,0 +1,20 @@
+- name: Install tuned
+  package:
+    name: tuned
+
+- name: Start tuned and enable at boot time
+  systemd:
+    name: tuned
+    state: started
+    enabled: true
+
+- name: Get tuned profile
+  command: /usr/sbin/tuned-adm active
+  register: tuned_active
+  changed_when: false
+  ignore_errors: true
+
+- name: Set built-in tuned profile
+  command: "/usr/sbin/tuned-adm profile {{ tuned_active_builtin_profile }}"
+  when:
+    - tuned_active_builtin_profile not in tuned_active.stdout

@@ -1,0 +1,20 @@
+[nvmesh-management]
+n1038
+n1039
+n1040
+
+[mongod]
+# nvmesh-management
+n1038
+n1039
+n1040
+
+[nvmesh-target]
+
+[nvmesh-client]
+
+
+[all:vars]
+ansible_python_interpreter=/usr/libexec/platform-python
+ansible_password=g00g1e
+ansible_user=root

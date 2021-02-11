@@ -1,0 +1,29 @@
+---
+
+# dnf/yum repositosry credentials
+excelero_username: "excelero"
+excelero_password: "excelero1234"
+
+## redhat/centos/rockylinux version
+# TBD - dynamic
+excelero_repository_version: "7.7"
+
+## kernel required for nvmesh
+nvmesh_required_kernel: ""
+
+## redhat/centos/rockylinux
+# TBD - dynamic
+os_version: "8.2" # "8.3"
+
+## ofed version driver to install
+# TBD - no need
+ofed_version : "5.1-0.6.6.0"
+
+## python version required for nvmesh
+default_python: "python2"
+
+
+# NVMesh configured nics
+configured_nics: "enp59s0f0;enp59s0f1"
+
+# TCP Enabled - TBD

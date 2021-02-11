@@ -1,0 +1,52 @@
+---
+
+- name: Install MongoDB repository
+  yum_repository:
+    name: mongodb-org-4.2
+    description: MongoDB Repository
+    file: mongodb-org-4.2
+    baseurl: "https://repo.mongodb.org/yum/redhat/$releasever/mongodb-org/4.2/x86_64/"
+    gpgkey: "https://www.mongodb.org/static/pgp/server-4.2.asc"
+    gpgcheck: yes
+
+
+- name: Install MongoDB
+  package:
+    name:
+      - mongodb-org
+      - python-pymongo
+    state: installed
+
+- name: Modify /etc/mongod.conf
+  template:
+    src: 'etc/mongod.conf'
+    dest: /etc/mongod.conf
+    mode: 0644
+    owner: root
+    group: root
+
+- name: Ensure /var/lib/mongo belongs to mongod user
+  file:
+    path: /var/lib/mongo
+    state: directory
+    owner: mongod
+    group: mongod
+    mode: '0755'
+
+- name: Enable and start mongodb
+  systemd:
+    name: mongod
+    state: started
+    enabled: yes
+
+- name: "Ensure replica set {{ replica_set_name }} exists"
+  community.mongodb.mongodb_replicaset:
+    login_host: localhost
+    # login_user: admin
+    # login_password: admin
+    replica_set: "{{ replica_set_name }}"
+    members:
+      - "{{ groups.mongod[0] }}:27017"
+      - "{{ groups.mongod[1] }}:27017"
+      - "{{ groups.mongod[2] }}:27017"
+  when: groups.mongod.index(inventory_hostname) == 0

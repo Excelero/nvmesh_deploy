@@ -1,0 +1,46 @@
+---
+
+- name: Create a XFS primary partition
+  community.general.parted:
+    device: "/dev/nvmesh/{{ item.name }}"
+    number: 1
+    label: "gpt"
+    part_start: "256s"
+    part_end: "100%"
+    state: present
+  loop: "{{ volumes_to_create }}"
+
+- name: Format partition with XFS
+  community.general.filesystem:
+    fstype: xfs
+    dev: "/dev/nvmesh/{{ item.name }}p1"
+    opts: "-K -d su=4k,sw=8 -l version=2,su=4k -isize=512"
+  loop: "{{ volumes_to_create }}"
+  run_once: true
+
+# # TODO: cpu pining for process
+# # https://community.mellanox.com/s/article/howto-configure-and-test-beegfs-with-rdma
+# # https://community.mellanox.com/s/article/understanding-numa-node-for-performance-benchmarks
+
+- name: Create /beegfs directory and subdirectories
+  file:
+    path: "{{ item.mount_point }}"
+    state: directory
+  loop: "{{ volumes_to_create }}"
+
+- name: Attach volumes to all hosts
+  shell:
+    "/usr/bin/nvmesh_attach_volumes {{ item.name }}"
+  loop: "{{ volumes_to_create }}"
+
+- name: Mount default volumes
+  ansible.posix.mount:
+    path: "{{ item.mount_point }}"
+    src: "/dev/nvmesh/{{ item.name }}p1"
+    fstype: xfs
+    state: present
+    opts: "rw,noatime,nodiratime,largeio,inode64,noauto"
+    state: mounted
+  loop: "{{ volumes_to_create }}"
+
+

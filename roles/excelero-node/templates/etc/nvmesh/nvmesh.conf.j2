@@ -1,0 +1,45 @@
+# NVMesh configuration file
+# This configuration file is utilized by Excelero NVMesh(tm) applications for various options.
+# Define the management protocol
+# MANAGEMENT_PROTOCOL="<https/http>"
+# Example
+# MANAGEMENT_PROTOCOL="https"
+
+MANAGEMENT_PROTOCOL="https"
+
+# Define the location of the NVMesh Management Websocket servers
+# MANAGEMENT_SERVERS="<server name or IP>:<port>,<server name or IP>:<port>,..."
+# Example:
+# MANAGEMENT_SERVERS="nvmesh-management1:4001,nvmesh-management2:4001"
+
+MANAGEMENT_SERVERS="172.16.135.115:4001,172.16.135.116:4001,172.16.135.117:4001"
+
+# Define the nics that will be available for NVMesh Client/Target to work with
+# CONFIGURED_NICS="<interface name;interface name;...>"
+# To allow all nics to be available leave empty. Example: CONFIGURED_NICS=""
+# Example:
+# CONFIGURED_NICS="ib0;eno1;eth0"
+
+CONFIGURED_NICS="ens1f0;ens1f1"
+
+# Used to set the maximum burst size of queries to the IB Session Manager. This parameter is not relevant for
+RoCE.
+# A smaller number here will decrease the load on the SM, but will increase the initial bring-up time.
+# Example:
+# MAX_SM_QUERY_BURST="32"
+MAX_SM_QUERY_BURST="32"
+# Used to enable RDDA for ConnectX-4 or ConnectX-5 adapters
+# MLX5_RDDA_ENABLED="<Yes/No>"
+# Example:
+# MLX5_RDDA_ENABLED="No"
+MLX5_RDDA_ENABLED="Yes"
+# Used to dump fast log (ftrace) buffer on kernel panic
+# DUMP_FTRACE_ON_OOPS="<Yes/No>"
+# Example:
+# DUMP_FTRACE_ON_OOPS="Yes"
+DUMP_FTRACE_ON_OOPS="Yes"
+# Used to determine whether previously attached volumes should be attached on restart
+# AUTO_ATTACH_VOLUMES="<Yes/No>"
+# Example:
+# AUTO_ATTACH_VOLUMES="No"
+AUTO_ATTACH_VOLUMES="Yes"

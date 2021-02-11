@@ -1,0 +1,24 @@
+---
+- name: Download NVIDIA-Mellanox OFED
+  get_url:
+    url: "{{ nvidia_ofed_url }}"
+    dest: "{{ ofed_driver_path }}"
+    mode: "0440"
+
+- name: "Decompress {{ ofed_driver_path }}"
+  unarchive:
+    src: "{{ ofed_driver_path }}"
+    dest: /tmp
+    remote_src: yes
+
+- name: Install NVIDIA-Mellanox OFED driver
+  shell:
+    "/tmp/{{ ofed_driver_name }}/mlnxofedinstall --without-srp --without-isert --without-iser --without-rshim --without-mlnx-rdma-rxe --distro {{ os_type}}{{ os_version }} --force"
+  args:
+    executable: /bin/bash
+
+- name: Reload driver
+  systemd:
+    name: openibd
+    state: started
+    enabled: yes

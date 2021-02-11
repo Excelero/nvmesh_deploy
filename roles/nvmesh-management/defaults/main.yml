@@ -1,0 +1,2 @@
+node_version: '12'
+replica_set_name: 'rs0'

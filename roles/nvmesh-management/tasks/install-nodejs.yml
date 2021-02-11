@@ -1,0 +1,12 @@
+---
+## BIG TBD - need to add condition for centos 7 or 8 -     when:
+#      - ansible_facts['distribution'] == "CentOS"
+#      - ansible_facts['distribution_major_version'] == "6"
+
+- name: "Install NodeJS {{ node_version }} repository"
+  ansible.builtin.shell: curl --silent --location https://rpm.nodesource.com/setup_12.x | sudo -E bash -
+
+- name: "Install NodeJS"
+  package:
+    name:
+      - nodejs

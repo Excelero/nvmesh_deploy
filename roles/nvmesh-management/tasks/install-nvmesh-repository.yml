@@ -1,0 +1,11 @@
+---
+- name: Create NVMesh installation repository
+  yum_repository:
+    name: NVMesh
+    description: Excelero NVMesh
+    file: nvmesh
+    baseurl: "https://repo.excelero.com/repos/nvmesh/2.0/centos/{{ excelero_repository_version }}/x86_64/"
+    gpgkey: "https://repo.excelero.com/repos/nvmesh/RPM-GPG-KEY-Excelero"
+    username: "{{ excelero_username }}"
+    password: "{{ excelero_password }}"
+    gpgcheck: yes

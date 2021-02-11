@@ -1,0 +1,8 @@
+## BIG TBD - should be gathered from the main vars file
+# dnf/yum repositosry credentials
+excelero_username: "excelero"
+excelero_password: "excelero1234"
+
+## redhat/centos/rockylinux version
+# TBD - dynamic
+excelero_repository_version: "7.7"

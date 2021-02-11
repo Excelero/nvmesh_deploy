@@ -1,0 +1,60 @@
+---
+- name: Gathering facts
+  setup:
+
+- name: Update before install kernel sources
+  package:
+    name: "*"
+    state: latest
+    exclude: kernel*,centos*
+  register: update_package
+
+- debug: var=update_package
+
+- name: Install specific kernel (nmesh build)
+  package:
+    name:
+      - https://vault.centos.org/8.2.2004/BaseOS/x86_64/os/Packages/kernel-core-{{ nvmesh_required_kernel}}.rpm
+      - https://vault.centos.org/8.2.2004/BaseOS/x86_64/os/Packages/kernel-modules-{{ nvmesh_required_kernel }}.rpm
+      - https://vault.centos.org/8.2.2004/BaseOS/x86_64/os/Packages/kernel-{{ nvmesh_required_kernel }}.rpm
+      - https://vault.centos.org/8.2.2004/BaseOS/x86_64/os/Packages/kernel-headers-{{ nvmesh_required_kernel }}.rpm
+    state: installed
+
+## todo
+- name: Set default kernel
+  command:
+    "grubby --set-default-index=0"
+
+- name: Reboot host (if required) and wait for restart
+  reboot:
+    msg: "Reboot initiated by Ansible"
+    connect_timeout: 5
+    reboot_timeout: 600
+    pre_reboot_delay: 0
+    post_reboot_delay: 30
+    test_command: whoami
+  when: hostvars[inventory_hostname]['ansible_kernel'] != nvmesh_required_kernel
+
+- name: Install required packages
+  package:
+    name:
+      - rdma-core-devel
+      - createrepo
+      - gdb-headless
+      - rpm-build
+      - python2-devel
+      - tcl
+      - tk
+      - tcsh
+      - gcc-gfortran
+      - gcc
+      - pciutils
+      - lsof
+      - make
+      - unzip
+      - elfutils-libelf-devel
+    state: installed
+
+- name: Set {{ default_python }} as default python (/usr/bin/python)
+  shell:
+    "alternatives --set python /usr/bin/{{ default_python }} "

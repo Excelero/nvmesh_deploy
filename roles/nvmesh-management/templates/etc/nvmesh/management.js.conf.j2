@@ -1,0 +1,176 @@
+var config = {};
+
+//*******************************************************************
+// General Options
+//*******************************************************************
+
+// Force an IP address to use for accepting and sending management traffic.
+//config.forceIP = '172.0.1.47';
+
+// The TCP port the management server should listen on.
+config.port = 4000;
+
+// The TCP port number to be used by management for dynamic updates from clients and targets.
+config.webSocketServerPort = 4001;
+
+// Web socket parameters. Do not modify these settings unless explicitly authorized by Excelero.
+config.websocket = {
+	serverConfig: {
+		keepalive: true,
+		keepaliveInterval: 2000,
+		dropConnectionOnKeepaliveTimeout: true,
+		keepaliveGracePeriod: 30000,
+		closeTimeout: 3000,
+		outOfSyncInterval: 5000,
+		outOfsyncThreshold: 5000,
+		fragmentOutgoingMessages: true,
+		maxReceivedMessageSize: Math.pow(1024, 3), // 1 GiB
+		maxReceivedFrameSize: Math.pow(1024, 3)   // 1 GiB
+	},
+	clientConfig: {
+		closeTimeout: 3000,
+		fragmentOutgoingMessages: true,
+		maxReceivedMessageSize: Math.pow(1024, 3), // 1 GiB
+		maxReceivedFrameSize: Math.pow(1024, 3)   // 1 GiB
+	},
+	//This settings are for HA keepAlive (ping-pong).
+	keepAliveTimeout: 10000,
+	keepAliveInterval: 2000
+};
+
+// Nodejs HTTP server configuration
+config.server = {
+	timeout: 1000 * 60 * 100,
+	keepAliveTimeout: 1000 * 60 * 10 //10 minutes
+}
+
+
+// debug
+config.enableFunctionExecutionTimers = false;
+//*******************************************************************
+// SSL Configuration Options
+//*******************************************************************
+
+// Determines whether or not HTTP communication to the management server is encrypted via SSL.
+config.useSSL = true;
+
+// Path to the file containing the SSL certificate to be used for HTTP encryption.
+config.cert = 'cert/server.crt';
+
+// Path to the file containing the key file for the certificate to be used for HTTP encryption.
+config.key = 'cert/server.key';
+
+// Limit the SSL communication to use a specific list of cipher suites separated by ':' (example: 'ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-SHA384')
+config.limitToSSLCipherSuites = '';
+
+//*******************************************************************
+// MongoDB Statistics Connection Options
+//*******************************************************************
+
+config.statisticsMongoConnection = {
+	hosts: '{{ groups.mongod[0] }}:27017,{{ groups.mongod[1] }}:27017,{{ groups.mongod[2] }}:27017',    // The URI used to connect to the MongoDB server(s) containing the management database. Example for replica set connection: nvme21:27017,nvme31:27017,nvme23:27017.
+	options: {
+		replicaSetName: '{{ replica_set_name }}'   // For management database redundancy, this setting is used to define the MongoDB Replica Set name. This value must be the same on all hosts. For example: rs0.
+	}
+}
+
+//*******************************************************************
+// MongoDB NVMesh Metadata Connection Options
+//*******************************************************************
+
+config.nvmeshMetadataMongoConnection = {
+	hosts: '{{ groups.mongod[0] }}:27017,{{ groups.mongod[1] }}:27017,{{ groups.mongod[2] }}:27017',    // The URI used to connect to the MongoDB server(s) containing the management database. Example for replica set connection: nvme21:27017,nvme31:27017,nvme23:27017.
+	options: {
+		replicaSetName: '{{ replica_set_name }}'   // For management database redundancy, this setting is used to define the MongoDB Replica Set name. This value must be the same on all hosts. For example: rs0.
+	}
+}
+
+// Limit the SSL communication to use a specific list of cipher suites separated by ':' (example: 'ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-SHA384')
+config.limitToSSLCipherSuites = '';
+
+//*******************************************************************
+// MongoDB Connection Options
+//*******************************************************************
+
+config.mongoConnection = {
+	hosts: '{{ groups.mongod[0] }}:27017,{{ groups.mongod[1] }}:27017,{{ groups.mongod[2] }}:27017',    // The URI used to connect to the MongoDB server(s) containing the management database. Example for replica set connection: nvme21:27017,nvme31:27017,nvme23:27017.
+	options: {
+		replicaSetName: '{{ replica_set_name }}'   // For management database redundancy, this setting is used to define the MongoDB Replica Set name. This value must be the same on all hosts. For example: rs0.
+	}
+}
+
+// Settings defining the connection handling from the Management Server to MongoDB. Do not modify these settings unless explicitly authorized by Excelero.
+config.mongoConnectOptions = {
+	keepAlive: 1,             // If set to 1 use a keep-alive mechanism to keep the connection to MongoDB alive.
+	connectTimeoutMS: 60000,  // Connection timeout in milliseconds.
+	socketTimeoutMS: 60000,   // Socket timeout in milliseconds.
+	useUnifiedTopology: true
+};
+
+
+//*******************************************************************
+// SMTP Options
+//*******************************************************************
+
+// Various configuration options specifying which mail server to use for outbound messages.
+config.SMTP = {
+	host: 'localhost',                // The hostname or IP address of the mail server.
+	port: 25,                         // The TCP port to be used on the specified mail server.
+	secure: false,                    // Determines where or not SMTP communication is encrypted.
+	authRequired: false,              // Determines whether authentication is required for SMTP communication.
+	username: '<username@gmail.com>', // If authRequired is true, utilize this username to authenticate to the SMTP server.
+	password: '<password>',           // If authRequired is true, password to be used for SMTP server account authentication.
+	useDefault: true                  // Determines whether to assume gmail SMTP server behavior.
+}
+
+// The email address to send "phone home" statistics to, at Excelero.
+config.exceleroEmail = 'customer.stats+customerName@excelero.com'
+
+// The email address which will be used for getting a notification upon nvmeshmgr service stop
+config.serviceStopNotificationEmail = ''
+
+
+//*******************************************************************
+// Backup Options
+//*******************************************************************
+
+// Various configuration options controlling aspects of the automatic backup of the management database.
+config.Backup = {
+	backupPath : "/var/opt/NVMesh/backups",   // The directory path where backup should be written.
+	hourlyBackupInterval: 1,                  // How often the database should be backed up.
+	dailyBackupTime: "00:00",                 // Time of the day that should be considered a daily backup.
+	hourlyRotationThreshold: 36,              // The number of hourly backups to keep before the oldest is rotated out (deleted).
+	dailylRotationThreshold: 30               // The number of daily backups to keep before the oldest is rotated out (deleted).
+}
+
+//*******************************************************************
+// Statistics Options
+//*******************************************************************
+
+// Determine which ip will be used for management communication in HA
+// config.forceIP = '10.0.1.47';
+
+config.collectStatistics = true;
+// The number of CPU cores to be used by the statistics processes.
+config.statisticsCores = 5;
+// List of statistics available ports to be used by statistics processes.
+config.statisticsPorts = [];
+config.forkStatisticsRollup = true;
+
+// The intervals at which the collected statistics data will be collapsed. There are four interval sets.
+config.rollupPolicy = [{
+	samplingRate: '1s',         // The rate of data sampling from clients and targets by the Management Server. Use s for seconds, min for minutes, hr for hours and d for days.
+	samplingDuration: '2min'    // During this duration, data is sampled from clients and targets by the Management Server at the specified samplingRate. Use s for seconds, min for minutes, hr for hours and d for days.
+}/*, {
+	samplingRate: '30s',
+	samplingDuration: '15min'
+}, {
+	samplingRate: '1min',
+	samplingDuration: '1hr'
+}, {
+	samplingRate: '1hr',
+	samplingDuration: '1d'
+}*/];
+
+// Do not remove the following line!
+module.exports = config;
