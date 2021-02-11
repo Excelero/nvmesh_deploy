@@ -1,0 +1,103 @@
+Scope: Deploy NVMesh to management, target, and client nodes.
+
+Management pre-reqs:
+	+ eval OS version (pre-flight, no auto-remediation)
+	+ eval kernel version (pre-flight, no auto-remediation)
+
+mongodb
+	+ add repo
+	+ install packages
+	+ configure 
+		+ fw port: tcp 27017
+			+ in from mgmt subnet? explicit hosts?
+			+ out to mgmt subnet? explicit hosts?
+		+ bindIP
+		? cacheSizeGB
+	+ enable / start service
+	+ conditional 
+		+ availability via replica set
+			+ test number of nodes
+			+ configure rs to include nodes
+	+ advanced / unscoped
+		+ access control
+		+ configure authenticated access
+
+node.js
+	+ add repo
+	+ install packages
+
+Management deploy:
+	+ add Excelero repo
+		+ credentials
+	+ install nvmesh-management and -utils
+	+ configure management.js.conf
+		+ https
+		+ mongod connections
+			+ include statistics and metadata connections, as well as base
+			+ conditional
+				+ single or HA with replica set, as required
+	+ configure fw ports: 
+	+ enable / start service
+	+ optional 
+		+ SMTP
+	+ advanced / unscoped
+		+ import certificate for SSL
+		+ configure mongod auth (user/password/db)
+		+ non-default statistics
+		+ non-default backup
+		+ enable zoning
+		+ containerized
+		+ remediate kernel
+
+Potential Post-Install of management:
+	+ (API) create non-default Admin user
+	+ optional
+		+ create Observer user(s)
+
+
+Client / Target pre-reqs:
+	+ eval OS version (pre-flight, no auto-remediation)
+	+ eval kernel version (pre-flight, no auto-remediation)
+	+ conditional 
+		+ eval MOFED version, if required (pre-flight, no auto-remediation)
+	+ advanced / unscoped:
+		+ remediate kernel
+		+ install / remediate MOFED
+
+Client / Target common deploy:
+	+ conditional
+		+ add excelero repo (if node not also management node)
+	+ install nvmesh-utils and nvmesh-core (let package manager skip -utils if already present, for simplicity)
+	+ nvmesh.conf
+		+ configure MANAGEMENT_SERVERS based on as-built above
+		+ https
+		+ conditional
+			+ configure CONFIGURED_NICS if subset	
+			+ TCP Enabled? (+ IPv4_ONLY) v. RDMA v. both
+
+Client-specific deploy:
+	+ optional
+		+ NVMF_IP
+	+ configure fw ports:
+	+ enable / start service
+
+Target-specific deploy:
+	+ conditional 
+		+ Excluded Drives
+		+ RDDA
+	+ configure fw ports:
+	+ enable / start service
+	+ advanced / unscoped
+		+ MAX_CLIENT_RSRC 
+
+Potential Post-Install of Targets:
+	+ populate API user & hashed password in ~/.nvmesh_cli_files/nvmesh_api_secrets
+	+ format drives
+
+Other unscoped:
+	+ Volumes
+	+ Classes
+	+ Custom VPGs
+	+ Security Groups
+	+ Keys
+	+ Configuration Profiles
