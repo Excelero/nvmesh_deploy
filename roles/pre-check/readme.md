@@ -2,9 +2,7 @@ Verifies OS matches variables from inventory, then dynamically installs correct 
 
 Intended to be included in other roles.
 
-example playbook (whatever.yml): 
----
-# Verify OS and kernel, configure appropriate NVMesh repo 
+example playbook section (whatever.yml): 
 
 - hosts: test
   gather_facts: true
@@ -21,10 +19,10 @@ example playbook (whatever.yml):
        
 example inventory (hosts), with variables:
 [test]
-10.0.1.11
-10.0.1.12
-10.0.1.13
-10.0.1.14
+10.10.10.11
+10.10.10.12
+10.10.10.13
+10.10.10.14
 
 [test:vars]
 nvmesh_repo_release=2.0
