@@ -4,6 +4,7 @@ Intended to be included in other roles.
 
 ** example playbook section (whatever.yml): ** 
 
+    ---  
     - hosts: test
       gather_facts: true
       any_errors_fatal: true
