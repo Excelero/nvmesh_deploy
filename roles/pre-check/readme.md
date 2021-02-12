@@ -2,22 +2,22 @@ Verifies OS matches variables from inventory, then dynamically installs correct 
 
 Intended to be included in other roles.
 
-example playbook section (whatever.yml): 
+** example playbook section (whatever.yml): ** 
 
-- hosts: test
-  gather_facts: true
-  any_errors_fatal: true
-  become: true
+    - hosts: test
+      gather_facts: true
+      any_errors_fatal: true
+      become: true
   
-  vars:
-    delegate_facts_host: true
+      vars:
+        delegate_facts_host: true
   
-  tasks:
-    - import_role: 
-       name: pre-check
+      tasks:
+        - import_role: 
+           name: pre-check
        
        
-example inventory (hosts), with variables:
+** example inventory (hosts), with variables: **
 [test]
 10.10.10.11
 10.10.10.12
