@@ -1,0 +1,15 @@
+---
+
+- name: Verify Linux distribution and version
+  assert:
+    that:  
+    - ansible_distribution is match desired_distribution and ansible_distribution_version is version desired_distribution_version
+    fail_msg: Installed distribution {{ ansible_distribution }} {{ ansible_distribution_version }} does not match {{ desired_distribution }} {{ desired_distribution_version }}
+    success_msg: Installed distribution is {{ ansible_distribution }} {{ ansible_distribution_version }}
+
+- name: Verify current Linux kernel version
+  assert:
+    that:
+    - ansible_kernel is match desired_kernel
+    fail_msg: Installed kernel {{ ansible_kernel }} does not match {{ desired_kernel }}
+    success_msg: Installed kernel is {{ ansible_kernel }}
