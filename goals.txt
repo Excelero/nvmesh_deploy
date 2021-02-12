@@ -36,7 +36,7 @@ Management deploy:
 			+ include statistics and metadata connections, as well as base
 			+ conditional
 				+ single or HA with replica set, as required
-	+ configure fw ports: 
+	+ configure fw ports: tcp: 4000, 4001 and (maybe conditional?) tcp: 4002, 4003, 4004, 4005, 4006 for statistics
 	+ enable / start service
 	+ optional 
 		+ SMTP
@@ -78,14 +78,14 @@ Client / Target common deploy:
 Client-specific deploy:
 	+ optional
 		+ NVMF_IP
-	+ configure fw ports:
+	+ configure fw ports: tcp 4001 
 	+ enable / start service
 
 Target-specific deploy:
 	+ conditional 
 		+ Excluded Drives
 		+ RDDA
-	+ configure fw ports:
+	+ configure fw ports: tcp 4001, udp 4791
 	+ enable / start service
 	+ advanced / unscoped
 		+ MAX_CLIENT_RSRC 
