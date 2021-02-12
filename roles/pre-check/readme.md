@@ -19,6 +19,7 @@ Intended to be included in other roles.
        
        
 ** example inventory (hosts), with variables: **
+
     [test]
     10.10.10.11
     10.10.10.12
