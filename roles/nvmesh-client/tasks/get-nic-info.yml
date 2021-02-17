@@ -16,5 +16,5 @@
   debug:
     var: "hostvars[inventory_hostname]['ansible_' + item]"
   loop: "{{ ansible_interfaces }}"
-  # shows all successfully, but skips all with
+  # shows all successfully, but skips all with the following
   # when: hostvars[inventory_hostname]['ansible_' + item]['active'] == 'true'"

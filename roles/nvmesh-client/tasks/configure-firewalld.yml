@@ -6,8 +6,6 @@
 - name: Get service facts
   ansible.builtin.service_facts:
 
-- debug: ansible_facts.services['firewalld.service']      
-
 - name: Open 4001/tcp if firewalld is running and enabled
   ansible.posix.firewalld:
     port: 4001/tcp
