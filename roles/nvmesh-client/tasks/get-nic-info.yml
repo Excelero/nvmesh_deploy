@@ -1,0 +1,20 @@
+---
+
+- name: List All Interfaces From Facts
+  debug: 
+    msg: "{{ ansible_interfaces }}"
+
+# Isn't creating my variable / fact successfully, likely because of the conditional
+#
+# - name: Identify Active Interfaces
+#   set_fact:
+#     active_interfaces: "{% set active_interfaces = active_interfaces|default([]) + [hostvars[inventory_hostname]['ansible_' + item]] %} {{ active_interfaces|list }}"
+#   when: "hostvars[inventory_hostname]['ansible_' + item]['type'] != 'loopback' and hostvars[inventory_hostname]['ansible_' + item]['active'] == 'true'"
+#   loop: "{{ ansible_interfaces }}"
+
+- name: Crazy debug to try to figure it out
+  debug:
+    var: "hostvars[inventory_hostname]['ansible_' + item]"
+  loop: "{{ ansible_interfaces }}"
+  # shows all successfully, but skips all with
+  # when: hostvars[inventory_hostname]['ansible_' + item]['active'] == 'true'"

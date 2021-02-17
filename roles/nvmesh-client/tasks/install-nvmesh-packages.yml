@@ -1,0 +1,10 @@
+---
+
+- name: Install NVMesh Packages
+  package:
+    name:
+      - nvmesh-utils
+      - nvmesh-core
+    state: installed
+
+# TODO: include dependencies

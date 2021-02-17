@@ -1,0 +1,7 @@
+---
+
+- include_tasks: configure-firewalld.yml
+- include_tasks: install-nvmesh-packages.yml
+
+# Not ready
+# - include_tasks: get-nic-info.yml
