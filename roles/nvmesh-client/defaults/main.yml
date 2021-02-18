@@ -1,0 +1,8 @@
+## Move to inventory
+nvmesh_configured_nics: 
+  ens3f0: RDMA
+  ens3f1: TCP
+
+
+## Initialize Empty String
+nvmesh_configured_nics_string: ""

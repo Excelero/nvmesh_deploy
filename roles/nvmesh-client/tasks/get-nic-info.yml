@@ -1,20 +1,23 @@
 ---
 
-- name: List All Interfaces From Facts
-  debug: 
-    msg: "{{ ansible_interfaces }}"
+- name: Verify that Configured Network Interfaces are Active
+  assert:
+    that:
+    - "hostvars[inventory_hostname]['ansible_' + item.interface]['active']"
+    fail_msg: "{{ item.interface }} of type {{ hostvars[inventory_hostname]['ansible_' + item.interface]['type'] }} is not active"
+    success_msg: "{{ item.interface }} of type {{ hostvars[inventory_hostname]['ansible_' + item.interface]['type'] }} is active"
+  loop: "{{ nvmesh_configured_nics | dict2items(key_name='interface', value_name='protocol') }}"
 
-# Isn't creating my variable / fact successfully, likely because of the conditional
-#
-# - name: Identify Active Interfaces
-#   set_fact:
-#     active_interfaces: "{% set active_interfaces = active_interfaces|default([]) + [hostvars[inventory_hostname]['ansible_' + item]] %} {{ active_interfaces|list }}"
-#   when: "hostvars[inventory_hostname]['ansible_' + item]['type'] != 'loopback' and hostvars[inventory_hostname]['ansible_' + item]['active'] == 'true'"
-#   loop: "{{ ansible_interfaces }}"
+- name: Build CONFIGURED_NICS string
+  set_fact:
+    nvmesh_configured_nics_string: "{{ nvmesh_configured_nics_string }}{{ (index > 0)|ternary(';','') }}{{ item.interface }}/{{ item.protocol }}"
+  loop: "{{ nvmesh_configured_nics | dict2items(key_name='interface', value_name='protocol') }}"
+  loop_control:
+    index_var: index
 
-- name: Crazy debug to try to figure it out
+- name: Debug CONFIGURED_NICS string
   debug:
-    var: "hostvars[inventory_hostname]['ansible_' + item]"
-  loop: "{{ ansible_interfaces }}"
-  # shows all successfully, but skips all with the following
-  # when: hostvars[inventory_hostname]['ansible_' + item]['active'] == 'true'"
+    var: nvmesh_configured_nics_string
+
+## TODO: template or direct file manipulation to inject full CONFIGURED_NICS 
+##       need to figure out the quoting when doing that
