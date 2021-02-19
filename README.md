@@ -47,3 +47,4 @@ mv site.yml.sample site.yml
 Modify the playbook as necessary for the requirements of your cluster.
 
 BIG TBD - need to find a way to validate the configuration file is coming from the RPM and not hard coded
+([KG]: for nvmesh-client, I used lineinfile instead of a jinja template (and took a backup on first modification.  It's not "elegant", but addresses this concern)
