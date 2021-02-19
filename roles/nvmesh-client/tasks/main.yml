@@ -2,7 +2,6 @@
 
 - include_tasks: configure-firewalld.yml
 - include_tasks: install-nvmesh-packages.yml
-
-# Not ready
-#
-# - include_tasks: get-nic-info.yml
+- include_tasks: set-tuned-adm.yml
+- include_tasks: populate-nvmesh-conf.yml
+- include_tasks: set-sysctl-params.yml

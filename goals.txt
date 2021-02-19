@@ -68,6 +68,7 @@ Client / Target common deploy:
 	+ conditional
 		+ add excelero repo (if node not also management node)
 	+ install nvmesh-utils and nvmesh-core (let package manager skip -utils if already present, for simplicity)
+	+ sysctl parameters as per nvmesh_health_check -- as /etc/sysctl.d/50-ipv4-arp.conf
 	+ nvmesh.conf
 		+ configure MANAGEMENT_SERVERS based on as-built above
 		+ https

@@ -1,0 +1,69 @@
+---
+
+## TODO: * Establish var for MANAGEMENT_PROTOCOL <http/https>, default to https
+##            ** Add MANAGEMENT_PROTOCOL to nvmesh.conf 
+##       * Establish var for MLNX_OFED and desired version, check for presence...
+##       * Establish var for NVMF_IP 
+##             ** Add the IP list (as needed, per host) to nvmesh.conf 
+##             ** and conditionally install nvmesh-nvmft package (via install-nvmesh-packages.yml)
+
+## Ensures that the intended CONFIGURED_NICS are all Up, fails if they aren't
+- name: Verify that Configured Network Interfaces are Active
+  assert:
+    that:
+    - "hostvars[inventory_hostname]['ansible_' + item.interface]['active']"
+    fail_msg: "{{ item.interface }} of type {{ hostvars[inventory_hostname]['ansible_' + item.interface]['type'] }} is not active"
+    success_msg: "{{ item.interface }} of type {{ hostvars[inventory_hostname]['ansible_' + item.interface]['type'] }} is active"
+  loop: "{{ nvmesh_configured_nics | dict2items(key_name='interface', value_name='protocol') }}"
+
+## Transform the nvmesh_configured_nics dictionary to nic/PROTO;nic/PROTO...
+- name: Build CONFIGURED_NICS list
+  set_fact:
+    nvmesh_cfg_nics_string: "{{ nvmesh_cfg_nics_string }}{{ (index > 0)|ternary(';','') }}{{ item.interface }}/{{ item.protocol }}"
+  loop: "{{ nvmesh_configured_nics | dict2items(key_name='interface', value_name='protocol') }}"
+  loop_control:
+    index_var: index
+
+## Assemble the full CONFIGURED_NICS line to inject / replace in /etc/opt/NVMesh/nvmesh.conf
+- name: Concatenate CONFIGURED_NICS String for nvmesh.conf
+  set_fact:
+    nvmesh_configured_nics_string: "{{ 'CONFIGURED_NICS=\"' }}{{ nvmesh_cfg_nics_string }}{{ '\"' }}"
+
+## Build TCP_ENABLED line, if any of the nvmesh_configured_nics specify the TCP protocol
+- name: Determine if TCP_ENABLED should be Yes
+  set_fact:
+    nvmesh_enable_tcp: 'TCP_ENABLED="Yes"'
+  with_dict: "{{ nvmesh_configured_nics }}"
+  when: item.value == "TCP"
+
+## Take a backup of nvmesh.conf, then Inject / Replace the CONFIGURED_NICS line
+- name: Add CONFIGURED_NICS String to nvmesh.conf
+  lineinfile:
+    path: /etc/opt/NVMesh/nvmesh.conf
+    backup: Yes
+    regexp: '^CONFIGURED_NICS='
+    insertafter: '^#\sCONFIGURED_NICS='
+    line: "{{ nvmesh_configured_nics_string }}"
+
+## Inject / Replace TCP_ENABLED line in /etc/opt/NVMesh/nvmesh.conf, if it needs to be set to Yes
+- name: Add TCP_ENABLED to nvmesh.conf, if necessary
+  lineinfile:
+    path: /etc/opt/NVMesh/nvmesh.conf
+    regexp: '^TCP_ENABLED='
+    insertafter: '^#\sTCP_ENABLED='
+    line: "{{ nvmesh_enable_tcp }}"
+  when: nvmesh_enable_tcp is defined 
+
+## Use the nvmesh-management group to build list of host1:4001,host2:4001...
+- name: Build MANAGEMENT_SERVERS list
+  set_fact:
+    nvmesh_management_server_list: "{{ nvmesh_management_server_list }} + [ '{{ item }}'+':4001' ]"
+  loop: "{{ groups.nvmesh-management }}"
+
+## Inject / Replace MANAGEMENT_SERVERS in /etc/opt/NVMesh/nvmesh.conf
+- name: Add MANAGEMENT_SERVERS to nvmesh.conf
+  lineinfile:
+    path: /etc/opt/NVMesh/nvmesh.conf
+    regexp: '^MANAGEMENT_SERVERS='
+    insertafter: '^#\sMANAGEMENT_SERVERS='
+    line: MANAGEMENT_SERVERS=\"{{ ",".join(nvmesh_management_server_list) }}\"

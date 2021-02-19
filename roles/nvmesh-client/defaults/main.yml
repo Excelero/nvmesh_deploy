@@ -1,8 +1,15 @@
-## Move to inventory
+## TODO: Move to inventory
 nvmesh_configured_nics: 
   ens3f0: RDMA
   ens3f1: TCP
 
 
-## Initialize Empty String
-nvmesh_configured_nics_string: ""
+
+
+## Default Values
+tuned_active_builtin_profile: "latency-performance"
+nvmesh_sysctl_file: "/etc/sysctl.d/50-ipv4-arp.conf"
+
+## Initialize Empty Strings
+nvmesh_cfg_nics_string: ""
+nvmesh_management_server_list: []

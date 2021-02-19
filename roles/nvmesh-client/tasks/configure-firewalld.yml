@@ -1,14 +1,15 @@
 ---
 
 # RHEL/CentOS 7 and 8 include firewalld by default
-# This naively adds a port if the service is running and enabled
+# This naively adds ports if the service is running and enabled
 
 - name: Get service facts
   ansible.builtin.service_facts:
 
-- name: Open 4001/tcp if firewalld is running and enabled
+- name: Open 4000/tcp and 4001/tcp if firewalld is running and enabled
   ansible.posix.firewalld:
-    port: 4001/tcp
+    port: 4000-4001/tcp
     permanent: yes
+    immediate: yes
     state: enabled
   when: ansible_facts.services['firewalld.service'].state == "running" and ansible_facts.services['firewalld.service'].status == "enabled" 
