@@ -17,17 +17,17 @@ file is /etc/ansible/hosts but this file can be placed anywhere and used with
 the -i flag of ansible-playbook.
 
 ```
-[nvmesh-management]
+[nvmesh_management]
 mgmt1
 mgmt2
 mgmt3
 
-[nvmesh-target]
+[nvmesh_target]
 target01
 target02
 target03
 
-[nvmesh-client]
+[nvmesh_client]
 client01
 client02
 client03
