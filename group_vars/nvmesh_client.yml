@@ -1,0 +1,27 @@
+## Client variables
+nvmesh_configured_nics: 
+  - ens3f0    # Add a line for each desired NIC
+#  - ens3f1
+
+nvmesh_tcp_enabled: "No"
+
+## Pre-check variables
+##
+## Note: Doesn't have to be here, could be host-based in certain heterogeneous scenarios.
+##
+## For dynamically building the repo.excelero.com baseurl
+nvmesh_repo_release: 2.2
+nvmesh_repo_username: excelero
+nvmesh_repo_password: excelero1234
+nvmesh_repo_distribution: centos
+##
+## For checking that the installed OS and kernel match
+desired_distribution: CentOS
+desired_distribution_version: 8.2
+desired_kernel: 4.18.0-193.19.1.el8_2.x86_64
+##
+## For checking OFED presence and version
+use_mlnx_ofed: True                         # True or False
+desired_mlnx_ofed_version: 5.2-2.2.0.0      # Desired version; can have any value if use_mlnx_ofed is False
+
+# TODO note: nvmf_ip should be per-client, not per-group

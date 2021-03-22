@@ -1,7 +1,24 @@
 ---
 
+## Run the pre-check role tasks --
+## See ../../pre-check/defaults/main.yml for expected group or host variables 
+- name: Run OS / kernel pre-checks and configure NVMesh repository
+  include_role: 
+    name: pre-check
+
+## Run the tasks for this (nvmesh-client) role --
 - include_tasks: configure-firewalld.yml
 - include_tasks: install-nvmesh-packages.yml
 - include_tasks: set-tuned-adm.yml
 - include_tasks: populate-nvmesh-conf.yml
 - include_tasks: set-sysctl-params.yml
+- include_tasks: enable-and-start-client.yml
+
+## TODO: 
+##       * Test and Validate with firewalld present
+##       * ? Establish var for MANAGEMENT_PROTOCOL <http/https>, default to https
+##            ** Add MANAGEMENT_PROTOCOL to nvmesh.conf (dependency on nvmesh-management)
+##            ** Currently does not modify the config file's default (https)
+##       * ? Establish var for NVMF_IP 
+##             ** Add the IP list (as needed, per host) to nvmesh.conf 
+##             ** and conditionally install nvmesh-nvmft package (via install-nvmesh-packages.yml)

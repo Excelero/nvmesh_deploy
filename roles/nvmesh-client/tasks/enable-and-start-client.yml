@@ -1,0 +1,7 @@
+---
+
+- name: Enable and Start the nvmeshclient Service
+  service:
+    name: nvmeshclient
+    enabled: yes
+    state: started

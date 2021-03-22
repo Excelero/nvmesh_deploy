@@ -1,24 +1,39 @@
 ---
+
+- name: some ofed installed
+  stat:
+    path: /usr/bin/ofed_info
+  register: ofed_exists
+
+- name: test ofed version
+  ansible.builtin.shell: /usr/bin/ofed_info -n
+  register: installed_ofed_version
+  when: ofed_exists.stat.exists
+
 - name: Download NVIDIA-Mellanox OFED
   get_url:
     url: "{{ nvidia_ofed_url }}"
     dest: "{{ ofed_driver_path }}"
     mode: "0440"
+  when: not ofed_exists.stat.exists or installed_ofed_version.stdout != ofed_version
 
 - name: "Decompress {{ ofed_driver_path }}"
   unarchive:
     src: "{{ ofed_driver_path }}"
     dest: /tmp
     remote_src: yes
+  when: not ofed_exists.stat.exists or installed_ofed_version.stdout != ofed_version
 
 - name: Install NVIDIA-Mellanox OFED driver
   shell:
     "/tmp/{{ ofed_driver_name }}/mlnxofedinstall --without-srp --without-isert --without-iser --without-rshim --without-mlnx-rdma-rxe --distro {{ os_type}}{{ os_version }} --force"
   args:
     executable: /bin/bash
+  when: not ofed_exists.stat.exists or installed_ofed_version.stdout != ofed_version
 
 - name: Reload driver
   systemd:
     name: openibd
     state: started
     enabled: yes
+  when: not ofed_exists.stat.exists or installed_ofed_version.stdout != ofed_version

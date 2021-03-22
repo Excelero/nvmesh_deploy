@@ -1,0 +1,27 @@
+---
+
+- name: Gather package facts
+  package_facts:
+    manager: auto
+
+- name: Verify whether any Mellanox OFED package is installed
+  set_fact:
+    ofed_installed: "{{ ansible_facts.packages['mlnx-ofa_kernel'] }}"
+  when: "'mlnx-ofa_kernel' in ansible_facts.packages"
+
+- name: Get OFED version details
+  ansible.builtin.shell: /usr/bin/ofed_info -n
+  register: installed_ofed_version
+  # when: ofed_installed is defined
+  ignore_errors: True   # So it won't fail if ofed_info does not exist
+
+# use_mlnx_ofed: True
+# desired_mlnx_ofed_version: 5.2-2.2.0.0
+
+- name: Verify OFED install state and version
+  assert:
+    that:  
+    - (use_mlnx_ofed and installed_ofed_version.stdout == desired_mlnx_ofed_version) or (not use_mlnx_ofed and installed_ofed_version.stdout == "")
+    fail_msg: use_mlnx_ofed is {{ use_mlnx_ofed }}, the installed OFED is {{ installed_ofed_version.stdout }}, and the desired OFED is {{ desired_mlnx_ofed_version }}
+    success_msg: use_mlnx_ofed is {{ use_mlnx_ofed }}, the installed OFED is {{ installed_ofed_version.stdout }}, and the desired OFED is {{ desired_mlnx_ofed_version }}
+      

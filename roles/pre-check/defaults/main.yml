@@ -1,4 +1,4 @@
-##### Reference for setting variables in inventory (NOTE: INI format requires "=" and not ":")
+##### Reference for setting variables or inventory (NOTE: INI format requires "=" and not ":")
 ##### Ensure that each of the following is defined in inventory:
 #####   nvmesh_repo_release, nvmesh_repo_distribution, nvmesh_repo_username, nvmesh_repo_password
 #####   desired_distribution, desired_distribution_version, desired_kernel
@@ -15,7 +15,7 @@
 # desired_distribution: RedHat
 # nvmesh_repo_distribution: redhat
 
-##### Distribution version and kernel are common for CentOS and RHEL
+##### Distribution version and kernel are common for CentOS and RHEL  The following are 2.0.5-compatible kernels
 
 # desired_distribution_version: 8.2
 # desired_kernel: 4.18.0-193.el8.x86_64
