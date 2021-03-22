@@ -17,17 +17,17 @@ file is /etc/ansible/hosts but this file can be placed anywhere and used with
 the -i flag of ansible-playbook.
 
 ```
-[nvmesh-management]
+[nvmesh_management]
 mgmt1
 mgmt2
 mgmt3
 
-[nvmesh-target]
+[nvmesh_target]
 target01
 target02
 target03
 
-[nvmesh-client]
+[nvmesh_client]
 client01
 client02
 client03
@@ -47,3 +47,4 @@ mv site.yml.sample site.yml
 Modify the playbook as necessary for the requirements of your cluster.
 
 BIG TBD - need to find a way to validate the configuration file is coming from the RPM and not hard coded
+([KG]: for nvmesh-client, I used lineinfile instead of a jinja template (and took a backup on first modification.  It's not "elegant", but addresses this concern)
