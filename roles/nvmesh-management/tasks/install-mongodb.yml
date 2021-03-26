@@ -21,14 +21,14 @@
 - name: Install python-pymongo 
   package:
     name: python-pymongo
-  state: installed  
+    state: installed  
   when: ansible_distribution_version < "8.0"
 
 ## Install python3-pymongo on RHEL/CentOS 8.x
 - name: Install python3-pymongo
   package:
     name: python3-pymongo
-  state: installed
+    state: installed
   when: ansible_distribution_version >= "8.0"
 ######
 
