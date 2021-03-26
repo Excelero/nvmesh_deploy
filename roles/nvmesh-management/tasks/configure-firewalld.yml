@@ -14,4 +14,10 @@
     state: enabled
   when: ansible_facts.services['firewalld.service'].state == "running" and ansible_facts.services['firewalld.service'].status == "enabled" 
 
-  ## If NVMFT is added, it will require adding ports.
+- name: Open 27017/tcp for MongoDB if firewalld is running and enabled
+  ansible.posix.firewalld:
+    port: 27017/tcp
+    permanent: yes
+    immediate: yes
+    state: enabled
+  when: ansible_facts.services['firewalld.service'].state == "running" and ansible_facts.services['firewalld.service'].status == "enabled"

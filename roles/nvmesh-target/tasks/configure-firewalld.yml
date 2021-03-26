@@ -14,4 +14,14 @@
     state: enabled
   when: ansible_facts.services['firewalld.service'].state == "running" and ansible_facts.services['firewalld.service'].status == "enabled" 
 
-  ## If NVMFT is added, it will require adding ports.
+## Consider making this conditional upon if a CONFIGURED_NIC uses ethernet 
+- name: Open udp port 4791 for RoCE 
+  ansible.posix.firewalld:
+    port: 4791/udp
+    permanent: yes
+    immediate: yes
+    state: enabled
+  when: ansible_facts.services['firewalld.service'].state == "running" and ansible_facts.services['firewalld.service'].status == "enabled"
+
+
+

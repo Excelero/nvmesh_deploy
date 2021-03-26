@@ -1,0 +1,7 @@
+---
+
+- name: Enable and Start the nvmeshtarget Service
+  service:
+    name: nvmeshtarget
+    enabled: yes
+    state: started

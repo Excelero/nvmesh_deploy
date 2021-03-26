@@ -1,11 +1,20 @@
 ---
+
+- name: Check if NVMesh repository is present
+  stat:
+    path: '/etc/yum.repos.d/nvmesh.repo'
+  register: nvmesh_repo_stat
+
+# - debug: var=nvmesh_repo_stat
+
 - name: Create NVMesh installation repository
   yum_repository:
     name: NVMesh
     description: Excelero NVMesh
     file: nvmesh
-    baseurl: "https://repo.excelero.com/repos/nvmesh/2.0/centos/{{ excelero_repository_version }}/x86_64/"
+    baseurl: "https://repo.excelero.com/repos/nvmesh/{{ nvmesh_repo_release }}/{{ nvmesh_repo_distribution }}/{{ ansible_distribution_version }}/x86_64/"
     gpgkey: "https://repo.excelero.com/repos/nvmesh/RPM-GPG-KEY-Excelero"
-    username: "{{ excelero_username }}"
-    password: "{{ excelero_password }}"
+    username: "{{ nvmesh_repo_username}}"
+    password: "{{ nvmesh_repo_password }}"
     gpgcheck: yes
+  when: not nvmesh_repo_stat.stat.exists

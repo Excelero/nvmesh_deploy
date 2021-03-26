@@ -1,0 +1,18 @@
+---
+
+- name: Configure sysctl for NVMesh in {{ nvmesh_sysctl_file }}
+  ansible.posix.sysctl:
+    name: "{{ item[0] }}"
+    value: "{{ item[1] }}"
+    state: present
+    sysctl_file: "{{ nvmesh_sysctl_file }}"
+    reload: no
+  loop:
+    - ['net.ipv4.conf.all.rp_filter', '2']
+    - ['net.ipv4.conf.all.arp_ignore', '2']
+    - ['net.ipv4.conf.all.arp_announce', '2']
+    - ['net.ipv4.conf.all.arp_filter', '1']
+    - ['net.ipv4.conf.default.rp_filter', '2']
+    - ['net.ipv4.conf.default.arp_ignore', '2']
+    - ['net.ipv4.conf.default.arp_announce', '2']
+    - ['net.ipv4.conf.default.arp_filter', '1']

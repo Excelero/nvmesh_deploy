@@ -6,6 +6,11 @@
 - name: "Install NodeJS {{ node_version }} repository"
   ansible.builtin.shell: curl --silent --location https://rpm.nodesource.com/setup_12.x | sudo -E bash -
 
+# ## Note: migrate from curl to ansible module to avoid the following at run-time
+# [WARNING]: Consider using the get_url or uri module rather than running 'curl'.  If you need
+# to use command because get_url or uri is insufficient you can add 'warn: false' to this
+# command task or set 'command_warnings=False' in ansible.cfg to get rid of this message.
+
 - name: "Install NodeJS"
   package:
     name:

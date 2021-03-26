@@ -13,3 +13,17 @@
     - ansible_kernel is match desired_kernel
     fail_msg: Installed kernel {{ ansible_kernel }} does not match {{ desired_kernel }}
     success_msg: Installed kernel is {{ ansible_kernel }}
+
+- name: Test whether SELinux is enabled
+  command: /usr/sbin/selinuxenabled
+  ignore_errors: yes
+  register: selinux_status
+
+- name: Verify that SELinux is disabled
+  assert:
+    that: 
+    - selinux_status.rc != 0
+    fail_msg: SELinux is enabled
+    success_msg: SELinux is disabled
+
+## Future -- if SELinux is enabled, configure services and modules to work with it successfully.

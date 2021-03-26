@@ -1,4 +1,5 @@
 ---
+- import_tasks: configure-firewalld.yml
 - import_tasks: install-mongodb.yml
 - import_tasks: install-nodejs.yml
 - import_tasks: install-nvmesh-repository.yml

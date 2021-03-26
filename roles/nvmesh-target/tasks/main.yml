@@ -1,0 +1,27 @@
+---
+
+## Run the pre-check role tasks, if the target node isn't also a client node --
+## See ../../pre-check/defaults/main.yml for expected group or host variables 
+- name: Run OS / kernel pre-checks and configure NVMesh repository
+  include_role: 
+    name: pre-check
+  when: "'nvmesh_client' not in group_names"  
+
+## Run the tasks for this (nvmesh-target) role --
+- include_tasks: configure-firewalld.yml        # Always run, as there is a unique port added
+- include_tasks: install-nvmesh-packages.yml
+  when: "'nvmesh_client' not in group_names"    # Skip if node is also in the nvmesh_client group
+- include_tasks: set-tuned-adm.yml
+  when: "'nvmesh_client' not in group_names"    # Skip if node is also in the nvmesh_client group
+- include_tasks: populate-nvmesh-conf.yml       # Includes unique tasks, but includes skip logic internally
+- include_tasks: set-sysctl-params.yml
+  when: "'nvmesh_client' not in group_names"    # Skip if node is also in the nvmesh_client group
+- include_tasks: enable-and-start-target.yml    # Always run, as the service name is different
+
+## TODO: 
+##       * More testing and validation with firewalld present
+##       * ? Establish var for MANAGEMENT_PROTOCOL <http/https>, default to https
+##            ** Add MANAGEMENT_PROTOCOL to nvmesh.conf (dependency on nvmesh-management)
+##            ** Currently does not modify the config file's default (https)
+##       * Only enable RoCE firewall port if using RoCE
+##       * Add ASSIGN_NVME_IRQS=(? "persocket" or "fullspread" based on other conditionals) if nvmesh_repo_release >= 2.2

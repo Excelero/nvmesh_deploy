@@ -1,7 +1,0 @@
----
-
-- import_tasks: install-packages.yml
-- import_tasks: install-nvidia-ofed.yml
-- import_tasks: tuned-adm.yml
-- import_tasks: install-nvmesh-repository.yml
-- import_tasks: disable-selinux-and-firewalld.yml

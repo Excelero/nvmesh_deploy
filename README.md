@@ -1,12 +1,21 @@
 # nvmesh_deploy
 Deployment Automation for NVMesh
 
+Has been tested with CentOS 7.x and 8.x and Ansible 2.9
+
+### Required Galaxy Collections
+ansible-galaxy collection install community.mongodb community.general ansible.posix
 
 ### Configuration and Usage
 This project assumes you have a basic knowledge of how Ansible works and have
 already prepared your hosts for configuration by Ansible.
-TBD - add pre-requisites (sshpass, ansible-galaxy collection install community.mongodb, ?)
-TBD - add how to use
+
+To use:
+Clone the repository
+Modify the inventory to specify hosts and roles in your cluster 
+Adjust the variables in group_vars/all.yml to configure the repo.excelero.com repository
+Adjust the variables in group_vars/nvmesh_client.yml and group_vars/nvmesh_target.yml to align with your hardware
+Adjust and execute the playbook: ansible-playbook site.yml
 
 
 ### Inventory
@@ -33,18 +42,13 @@ client02
 client03
 ```
 
-Note: nvmesh-target nodes will be converged (client+target) 
+Note: If a node is in both nvmesh_client and nvmesh_target groups, many tasks will be automatically skipped during the Target configuration.
 
 ### Playbook
 
-You must have a playbook to pass to the ansible-playbook command when deploying your cluster. There is a sample playbook at the root of the nvmesh_deploy project called *site.yml.sample*. This playbook should work fine for most usages, but it does include by default every daemon group which might not be appropriate for your cluster setup. Perform the following steps to prepare your playbook:
-
-Rename the sample playbook:
-```
-mv site.yml.sample site.yml
-```
+You must have a playbook to pass to the ansible-playbook command when deploying your cluster. There is a sample playbook at the root of the nvmesh_deploy project called *site.yml*. This playbook should work fine for most usages
 
 Modify the playbook as necessary for the requirements of your cluster.
 
 BIG TBD - need to find a way to validate the configuration file is coming from the RPM and not hard coded
-([KG]: for nvmesh-client, I used lineinfile instead of a jinja template (and took a backup on first modification.  It's not "elegant", but addresses this concern)
+([KG]: for nvmesh.conf in nvmesh-client and nvmesh-target roles, I used lineinfile instead of a jinja template and take a backup on first modification.  It's not "elegant", but addresses this concern. This is not the case for management.js.conf in the nvmesh-management role...)

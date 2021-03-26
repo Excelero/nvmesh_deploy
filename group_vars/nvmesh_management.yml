@@ -1,0 +1,2 @@
+## Variables for dynamically building the repo.excelero.com baseurl are in group_vars/all.yml by default
+## they can be moved to each host group if there are heterogeneous OSes or other reasons for uniqueness

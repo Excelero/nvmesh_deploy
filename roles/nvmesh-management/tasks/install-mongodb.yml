@@ -14,7 +14,7 @@
   package:
     name:
       - mongodb-org
-      - python-pymongo
+      - python-pymongo    # NOTE: Needed by the ansible galaxy collection for mongo.  CentOS 8.x requires python3-pymongo; may need a conditional here
     state: installed
 
 - name: Modify /etc/mongod.conf

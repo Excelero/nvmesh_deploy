@@ -1,4 +1,4 @@
-## Client variables
+## Target variables
 nvmesh_configured_nics: 
   - ens3f0    # Add a line for each desired NIC
   # - ens3f1
@@ -7,9 +7,9 @@ nvmesh_configured_nics:
 nvmesh_tcp_enabled: "No"
 
 ## Pre-check variables -- see <ansible root>/roles/pre-check/defaults/main.yml for more information/examples
+## Note: If nodes are in both nvmesh_client and nvmesh_target, the pre-check will only run during client configuration.
 ##
 ## Note: Doesn't have to be here, could be host-based in certain heterogeneous scenarios.
-## (Similarly, if everything is homogeneous, these can be defined in group_vars/all.yml)
 ##
 ## For checking that the installed OS and kernel match (these are tested against ansible facts for each host)
 desired_distribution: CentOS         
@@ -21,6 +21,3 @@ use_mlnx_ofed: True                         # True or False
 desired_mlnx_ofed_version: 5.2-2.2.0.0      # Desired version; can have any value -- including "" -- if use_mlnx_ofed is False
 ##
 ## Repo variables are defaulted to group_vars/all.yml, but can be place here if there are heterogeneous OSes, etc.
-
-
-# TODO note: If added, nvmf_ip should be per-client, not per-group

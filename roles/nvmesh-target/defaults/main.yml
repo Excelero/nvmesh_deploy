@@ -1,5 +1,4 @@
-## Per-deployment variables are in <ansible root>/group_vars/nvmesh_client.yml
-
+## Per-deployment variables are in <ansible root>/group_vars/nvmesh_target.yml
 
 ## Default Values
 tuned_active_builtin_profile: "latency-performance"

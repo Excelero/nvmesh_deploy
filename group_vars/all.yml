@@ -1,0 +1,5 @@
+## For dynamically building the repo.excelero.com baseurl
+nvmesh_repo_release: 2.2
+nvmesh_repo_username: repouser      
+nvmesh_repo_password: repopassword
+nvmesh_repo_distribution: centos

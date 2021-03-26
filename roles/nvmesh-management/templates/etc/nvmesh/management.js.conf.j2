@@ -68,7 +68,7 @@ config.limitToSSLCipherSuites = '';
 //*******************************************************************
 
 config.statisticsMongoConnection = {
-	hosts: '{{ groups.mongod[0] }}:27017,{{ groups.mongod[1] }}:27017,{{ groups.mongod[2] }}:27017',    // The URI used to connect to the MongoDB server(s) containing the management database. Example for replica set connection: nvme21:27017,nvme31:27017,nvme23:27017.
+	hosts: '{{ groups.nvmesh_management[0] }}:27017,{{ groups.nvmesh_management[1] }}:27017,{{ groups.nvmesh_management[2] }}:27017',    // The URI used to connect to the MongoDB server(s) containing the management database. Example for replica set connection: nvme21:27017,nvme31:27017,nvme23:27017.
 	options: {
 		replicaSetName: '{{ replica_set_name }}'   // For management database redundancy, this setting is used to define the MongoDB Replica Set name. This value must be the same on all hosts. For example: rs0.
 	}
@@ -79,7 +79,7 @@ config.statisticsMongoConnection = {
 //*******************************************************************
 
 config.nvmeshMetadataMongoConnection = {
-	hosts: '{{ groups.mongod[0] }}:27017,{{ groups.mongod[1] }}:27017,{{ groups.mongod[2] }}:27017',    // The URI used to connect to the MongoDB server(s) containing the management database. Example for replica set connection: nvme21:27017,nvme31:27017,nvme23:27017.
+	hosts: '{{ groups.nvmesh_management[0] }}:27017,{{ groups.nvmesh_management[1] }}:27017,{{ groups.nvmesh_management[2] }}:27017',    // The URI used to connect to the MongoDB server(s) containing the management database. Example for replica set connection: nvme21:27017,nvme31:27017,nvme23:27017.
 	options: {
 		replicaSetName: '{{ replica_set_name }}'   // For management database redundancy, this setting is used to define the MongoDB Replica Set name. This value must be the same on all hosts. For example: rs0.
 	}
@@ -93,7 +93,7 @@ config.limitToSSLCipherSuites = '';
 //*******************************************************************
 
 config.mongoConnection = {
-	hosts: '{{ groups.mongod[0] }}:27017,{{ groups.mongod[1] }}:27017,{{ groups.mongod[2] }}:27017',    // The URI used to connect to the MongoDB server(s) containing the management database. Example for replica set connection: nvme21:27017,nvme31:27017,nvme23:27017.
+	hosts: '{{ groups.nvmesh_management[0] }}:27017,{{ groups.nvmesh_management[1] }}:27017,{{ groups.nvmesh_management[2] }}:27017',    // The URI used to connect to the MongoDB server(s) containing the management database. Example for replica set connection: nvme21:27017,nvme31:27017,nvme23:27017.
 	options: {
 		replicaSetName: '{{ replica_set_name }}'   // For management database redundancy, this setting is used to define the MongoDB Replica Set name. This value must be the same on all hosts. For example: rs0.
 	}
