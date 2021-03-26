@@ -17,6 +17,7 @@
 - name: Test whether SELinux is enabled
   command: /usr/sbin/selinuxenabled
   ignore_errors: yes
+  changed_when: False
   register: selinux_status
 
 - name: Verify that SELinux is disabled
