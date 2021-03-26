@@ -14,8 +14,23 @@
   package:
     name:
       - mongodb-org
-      - python-pymongo    # NOTE: Needed by the ansible galaxy collection for mongo.  CentOS 8.x requires python3-pymongo; may need a conditional here
     state: installed
+
+######
+## Install python-pymongo on RHEL/CentOS 7.x
+- name: Install python-pymongo 
+  package:
+    name: python-pymongo
+  state: installed  
+  when: ansible_distribution_version < "8.0"
+
+## Install python3-pymongo on RHEL/CentOS 8.x
+- name: Install python3-pymongo
+  package:
+    name: python3-pymongo
+  state: installed
+  when: ansible_distribution_version >= "8.0"
+######
 
 - name: Modify /etc/mongod.conf
   template:
@@ -46,7 +61,7 @@
     # login_password: admin
     replica_set: "{{ replica_set_name }}"
     members:
-      - "{{ groups.mongod[0] }}:27017"
-      - "{{ groups.mongod[1] }}:27017"
-      - "{{ groups.mongod[2] }}:27017"
-  when: groups.mongod.index(inventory_hostname) == 0
+      - "{{ groups.nvmesh_management[0] }}:27017"
+      - "{{ groups.nvmesh_management[1] }}:27017"
+      - "{{ groups.nvmesh_management[2] }}:27017"
+  when: groups.nvmesh_management.index(inventory_hostname) == 0
