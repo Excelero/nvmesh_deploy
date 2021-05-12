@@ -103,6 +103,6 @@
     path: /etc/opt/NVMesh/nvmesh.conf
     regexp: '^MLX5_RDDA_ENABLED='
     insertafter: "EOF"
-    line: '{{ MLX5_RDDA_ENABLED="No" }}'
+    line: 'MLX5_RDDA_ENABLED="No"'
   when: installed_cpu_type == "AMD"
 
