@@ -15,5 +15,3 @@
 
 [all:vars]
 ansible_python_interpreter=/usr/libexec/platform-python
-ansible_password=root_password
-ansible_user=root
