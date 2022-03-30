@@ -42,7 +42,7 @@ client02
 client03
 ```
 
-Note: If a node is in both nvmesh_client and nvmesh_target groups, many tasks will be automatically skipped during the Target configuration.
+Note: Because each target runs client services as a dependency, target nodes do not need to be in the dlient section of the inventory.  For converged deployments, the nvmesh_client section may therefore be blank.  If a node is in both nvmesh_client and nvmesh_target groups, many redundant tasks will be automatically skipped during the Target configuration.
 
 ### Playbook
 
